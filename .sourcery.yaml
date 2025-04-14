@@ -1,29 +1,25 @@
 ignore:
   - .git
-  - venv
-  - .venv
-  - env
-  - .env
-  - .tox
   - node_modules
-  - vendor
-  - tests/            # skip test folder from refactoring suggestions
-  - '*_test.py'       # ignore test files
+  - dist
+  - coverage
+  - "**/__tests__/**"
+  - "**/*.test.ts"
+  - "**/*.spec.ts"
 
 rule_settings:
   enable: [default]
   disable:
-    - for-append-to-extend       # keep append for readability sometimes
-    - raise-from-previous-error # stylistic preference
-    - low-code-quality           # if you want to opt out of quality nags for now
+    - for-append-to-extend
+    - raise-from-previous-error
+    - low-code-quality
   rule_types:
     - refactoring
     - suggestion
     - comment
-  python_version: '3.9'
 
 metrics:
-  quality_threshold: 30.0  # stricter than default 25.0
+  quality_threshold: 30.0
 
 rule_tags:
   pre-commit:
@@ -38,6 +34,9 @@ rules:
     description: Use environment variables instead of hardcoding credentials
     pattern: "password: .*"
     replacement: "password: ${DB_PASSWORD}"
+    paths:
+      include:
+        - "**/app-config.yaml"
     tags:
       - critical-rules
     tests:
