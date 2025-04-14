@@ -33,7 +33,7 @@ rules:
   - id: avoid-hardcoded-credentials
     description: Use environment variables instead of hardcoding credentials
     pattern: "password: .*"
-    replacement: "password: ${DB_PASSWORD}"
+    replacement: "password: ${POSTGRES_PASSWORD}"
     paths:
       include:
         - "**/app-config.yaml"
@@ -43,7 +43,7 @@ rules:
       - match: |
           password: "secret"
         expect: |
-          password: ${DB_PASSWORD}
+          password: ${POSTGRES_PASSWORD}
 
 github:
   labels: []
