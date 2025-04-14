@@ -1,0 +1,59 @@
+ignore:
+  - .git
+  - venv
+  - .venv
+  - env
+  - .env
+  - .tox
+  - node_modules
+  - vendor
+  - tests/            # skip test folder from refactoring suggestions
+  - '*_test.py'       # ignore test files
+
+rule_settings:
+  enable: [default]
+  disable:
+    - for-append-to-extend       # keep append for readability sometimes
+    - raise-from-previous-error # stylistic preference
+    - low-code-quality           # if you want to opt out of quality nags for now
+  rule_types:
+    - refactoring
+    - suggestion
+    - comment
+  python_version: '3.9'
+
+metrics:
+  quality_threshold: 30.0  # stricter than default 25.0
+
+rule_tags:
+  pre-commit:
+    - stylistic
+    - critical-rules
+  critical-rules:
+    - use-literals
+    - use-comprehensions
+
+rules:
+  - id: avoid-hardcoded-credentials
+    description: Use environment variables instead of hardcoding credentials
+    pattern: "password: .*"
+    replacement: "password: ${DB_PASSWORD}"
+    tags:
+      - critical-rules
+    tests:
+      - match: |
+          password: "secret"
+        expect: |
+          password: ${DB_PASSWORD}
+
+github:
+  labels: []
+  ignore_labels:
+    - sourcery-ignore
+  request_review: author
+  sourcery_branch: sourcery/{base_branch}
+
+clone_detection:
+  min_lines: 5
+  min_duplicates: 2
+  identical_clones_only: true
